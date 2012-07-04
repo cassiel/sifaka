@@ -1,10 +1,17 @@
 (ns user
   (:require (sifaka [io :as io]
-                    [util :as u])
+                    [util :as u]
+                    [format :as f])
             (clojure [prxml :as p]))
   (:use overtone.osc)
   (:use overtone.osc.encode)
-  (:use overtone.osc.peer))
+  (:use overtone.osc.peer)
+  (:import [java.nio.channels DatagramChannel])
+  (:import [java.nio ByteBuffer])
+  (:import [java.net InetSocketAddress]))
+
+
+;; --- Basic XML generation.
 
 (with-out-str (p/prxml [:p]))
 
@@ -14,10 +21,6 @@
 ;; to handle any non-ASCII encoding such as UTF-8.
 
 
-
-
-(count ba)
-
 (def xxx (byte-array (map byte  [2 3 4])))
 
 (def yyy (byte-array 10))
@@ -26,9 +29,7 @@
 
 (map #(get yyy %) (range (count yyy)))
 
-
-
-
+;; --- OSC experiments (obsolete: the Lemur protocol isn't OSC).
 
 (def a (atom nil))
 
@@ -43,8 +44,6 @@
 
 (def client (osc-client LEMUR_HOST LEMUR_PORT))
 
-(def ba (io/read-file "test-data/tiny.jzml"))
-
 (osc-send client
           "/interface"
           (count ba)
@@ -53,3 +52,43 @@
           ba)
 
 @a
+
+;; --- XML file into byte-array.
+
+(def ba (io/read-file "test-data/tiny.jzml"))
+(count ba)
+
+;; --- Bespoke, Lemur-specific broken OSC:
+
+;; Header is 20 bytes / 5 int32s.
+;; 0:           padded payload length + 16
+;; 1+2:         "/jzml" padded
+;; 3:           ",b" padded
+;; 4:           unpadded payload length
+;;
+;; Actual (padded) payload is sent "raw", in packets limited to 1448 bytes.
+
+
+(def HEADER_SIZE_BYTES 20)
+
+
+
+(def chan (DatagramChannel/open))
+(.connect chan (InetSocketAddress. "10.0.0.125" 8002))
+
+
+
+(.write chan (ByteBuffer/wrap (byte-array (map byte [1 2 3 4]))))
+
+
+
+(.disconnect chan)
+
+(let
+    [ba (io/pad-string-to-bytes "AB")]
+  (map (partial get ba) (range (count ba))))
+
+(int \c)
+
+(map count
+     (f/package-data (byte-array (map byte [1 2 3 4 5]))))
