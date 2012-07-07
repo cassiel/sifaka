@@ -5,14 +5,9 @@
                     [xml-fu :as x])
             (sifaka.examples [sierpinski :as sp])
             (clojure [prxml :as p]))
-  (:use overtone.osc)
-  (:use overtone.osc.encode)
-  (:use overtone.osc.peer)
   (:import [java.nio.channels DatagramChannel]
            [java.nio ByteBuffer]
-           [java.net InetAddress InetSocketAddress DatagramSocket DatagramPacket]
-           [net.loadbang.osc.comms UDPTransmitter]
-           [net.loadbang.osc.data Message]))
+           [java.net InetAddress InetSocketAddress DatagramSocket DatagramPacket]))
 
 
 ;; --- Basic XML generation.
