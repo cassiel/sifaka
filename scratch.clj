@@ -1,7 +1,8 @@
 (ns user
   (:require (sifaka [io :as io]
                     [util :as u]
-                    [format :as f])
+                    [format :as f]
+                    (xml-fu :as x))
             (clojure [prxml :as p]))
   (:use overtone.osc)
   (:use overtone.osc.encode)
@@ -15,7 +16,7 @@
 
 ;; --- Basic XML generation.
 
-(with-out-str (p/prxml [:p]))
+(with-out-str (p/prxml [:p] [:q]))
 
 (with-out-str (p/prxml [:p {:class "greet"} [:i "Ladies & gentlemen"]]))
 
@@ -104,28 +105,16 @@
 
 
 
-(def chan (DatagramChannel/open))
-(.connect chan (InetSocketAddress. "10.0.0.13" 8002))
-(.isConnected chan)
-(.write chan (ByteBuffer/wrap (.getBytes "ABCDEF")))
-(.disconnect chan)
-(.close chan)
 
+(x/format-project-for-file [:fooble] [:gooble])
 
+(x/format-project-for-upload [:fooble] [:gooble])
 
+(with-out-str (p/prxml (x/project "Hello World")))
 
-(def sock (DatagramSocket.))
-(def ba (.getBytes "ABCDEF"))
-(def packet (DatagramPacket. ba
-                             (count ba)
-                             (InetAddress/getByName "10.0.0.13")
-                             8002))
-(.send sock packet)
-(.close sock)
-
-
-
-
-(def trx (UDPTransmitter. (InetAddress/getByName "10.0.0.13") 8002))
-(.transmitBytes trx (.getBytes "ABCDEF"))
-(.transmit trx (Message. "/hello"))
+(io/transmit-payload
+ "10.0.0.125"
+ 8002
+ (.getBytes (x/format-project-for-upload
+             (x/project "TestProject")
+             (x/fudge-window (x/fudge-container 100 100 200 50)))))
