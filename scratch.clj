@@ -6,9 +6,11 @@
   (:use overtone.osc)
   (:use overtone.osc.encode)
   (:use overtone.osc.peer)
-  (:import [java.nio.channels DatagramChannel])
-  (:import [java.nio ByteBuffer])
-  (:import [java.net InetSocketAddress]))
+  (:import [java.nio.channels DatagramChannel]
+           [java.nio ByteBuffer]
+           [java.net InetAddress InetSocketAddress DatagramSocket DatagramPacket]
+           [net.loadbang.osc.comms UDPTransmitter]
+           [net.loadbang.osc.data Message]))
 
 
 ;; --- Basic XML generation.
@@ -92,3 +94,38 @@
 
 (map count
      (f/package-data (byte-array (map byte [1 2 3 4 5]))))
+
+
+(def ba (io/read-file "test-data/tiny_PREPPED.jzml"))
+(count ba)
+
+(io/transmit-payload "127.0.0.1" 8002 ba)
+(io/transmit-payload "10.0.0.125" 8002 ba)
+
+
+
+(def chan (DatagramChannel/open))
+(.connect chan (InetSocketAddress. "10.0.0.13" 8002))
+(.isConnected chan)
+(.write chan (ByteBuffer/wrap (.getBytes "ABCDEF")))
+(.disconnect chan)
+(.close chan)
+
+
+
+
+(def sock (DatagramSocket.))
+(def ba (.getBytes "ABCDEF"))
+(def packet (DatagramPacket. ba
+                             (count ba)
+                             (InetAddress/getByName "10.0.0.13")
+                             8002))
+(.send sock packet)
+(.close sock)
+
+
+
+
+(def trx (UDPTransmitter. (InetAddress/getByName "10.0.0.13") 8002))
+(.transmitBytes trx (.getBytes "ABCDEF"))
+(.transmit trx (Message. "/hello"))

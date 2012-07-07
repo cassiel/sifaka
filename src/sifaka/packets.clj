@@ -1,4 +1,4 @@
-(ns sifaka.format
+(ns sifaka.packets
   (:require [sifaka [util :as util]])
   (:import [java.nio ByteBuffer ByteOrder]))
 
