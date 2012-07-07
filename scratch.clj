@@ -2,7 +2,8 @@
   (:require (sifaka [io :as io]
                     [util :as u]
                     [format :as f]
-                    (xml-fu :as x))
+                    [xml-fu :as x])
+            (sifaka.examples [sierpinski :as sp])
             (clojure [prxml :as p]))
   (:use overtone.osc)
   (:use overtone.osc.encode)
@@ -112,9 +113,36 @@
 
 (with-out-str (p/prxml (x/project "Hello World")))
 
+(with-out-str (p/prxml (x/fudge-container [100 100] [200 50] [80 80 80] [:foo])))
+
 (io/transmit-payload
  "10.0.0.125"
  8002
  (.getBytes (x/format-project-for-upload
              (x/project "TestProject")
-             (x/fudge-window (x/fudge-container 100 100 200 50)))))
+             (x/fudge-window (x/fudge-container
+                              [100 100]
+                              [200 200]
+                              [80 80 80]
+                              (x/fudge-container [5 5] [50 50] [255 255 255]))))))
+
+
+(defn boz [size]
+  (if (< size 30)
+    nil
+    (x/fudge-container [0 0] [size size] [80 80 80] (boz (- size 25)))))
+
+(boz 200)
+
+(io/transmit-payload
+ "10.0.0.125"
+ 8002
+ (.getBytes (x/format-project-for-upload
+             (x/project "TestProject")
+             (x/fudge-window (x/fudge-container
+                              [100 100]
+                              [500 500]
+                              [80 120 120]
+                              (boz 600))))))
+
+(sp/sierpinski 2 [0 0] 100)

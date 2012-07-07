@@ -41,8 +41,8 @@
    contents])
 
 (defn fudge-container
-  ^{:doc "Testing: fudge an empty container"}
-  [x y width height]
+  ^{:doc "Testing: fudge a container with optional contents."}
+  [[x y] [width height] [r g b] & contents]
   [:WINDOW {:class "Container"
             :text "Container"
             :x x
@@ -56,7 +56,9 @@
             :osc_target -2
             :midi_target -2
             :kbmouse_target -2
-            :color "9440511"
+            :color (+ (bit-shift-left r 16)
+                      (bit-shift-left g 8)
+                      b)
             :label 1
             :tabbar 1
-            :meta 0}])
+            :meta 0} contents])

@@ -1,0 +1,17 @@
+<JZML>
+<PROJECT version="3020" width="1024" height="724" osc_target="-2" midi_target="-2" kbmouse_target="-2"/>
+<WINDOW class="JAZZINTERFACE" text="Default" x="0" y="0" width="1024" height="724" state="1" group="0" font="tahoma,11,0" >
+<WINDOW class="Container" text="Container" x="64" y="74" width="200" height="200" state="1" group="0" font="tahoma,10,0" send="1" osc_target="-2" midi_target="-2" kbmouse_target="-2" color="32768" label="1" tabbar="1" meta="0">
+</WINDOW>
+<WINDOW class="Container" text="Container2" x="293" y="74" width="200" height="200" id="1" state="1" group="0" font="tahoma,10,0" send="1" osc_target="-2" midi_target="-2" kbmouse_target="-2" color="32768" label="1" tabbar="1" meta="0">
+<WINDOW class="Container" text="Container" x="10" y="7" width="117" height="123" state="1" group="0" font="tahoma,10,0" send="1" osc_target="-2" midi_target="-2" kbmouse_target="-2" color="8421376" label="1" tabbar="1" meta="0">
+<WINDOW class="Container" text="Container" x="41" y="33" width="32" height="32" state="1" group="0" font="tahoma,10,0" send="1" osc_target="-2" midi_target="-2" kbmouse_target="-2" color="9440511" label="1" tabbar="1" meta="0">
+</WINDOW>
+</WINDOW>
+</WINDOW>
+<WINDOW class="Container" text="Container3" x="64" y="296" width="200" height="200" id="2" state="1" group="0" font="tahoma,10,0" send="1" osc_target="-2" midi_target="-2" kbmouse_target="-2" color="9440511" label="1" tabbar="1" meta="0">
+</WINDOW>
+<WINDOW class="Container" text="Container4" x="293" y="296" width="200" height="200" id="3" state="1" group="0" font="tahoma,10,0" send="1" osc_target="-2" midi_target="-2" kbmouse_target="-2" color="9440511" label="1" tabbar="1" meta="0">
+</WINDOW>
+</WINDOW>
+</JZML>
