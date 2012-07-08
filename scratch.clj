@@ -1,10 +1,10 @@
 (ns user
   (:require (sifaka [io :as io]
                     [util :as u]
-                    [format :as f]
+                    [packets :as p]
                     [xml-fu :as x])
             (sifaka.examples [sierpinski :as sp])
-            (clojure [prxml :as p]))
+            (clojure [prxml :as px]))
   (:import [java.nio.channels DatagramChannel]
            [java.nio ByteBuffer]
            [java.net InetAddress InetSocketAddress DatagramSocket DatagramPacket]))
@@ -12,9 +12,9 @@
 
 ;; --- Basic XML generation.
 
-(with-out-str (p/prxml [:p] [:q]))
+(with-out-str (px/prxml [:p] [:q]))
 
-(with-out-str (p/prxml [:p {:class "greet"} [:i "Ladies & gentlemen"]]))
+(with-out-str (px/prxml [:p {:class "greet"} [:i "Ladies & gentlemen"]]))
 
 ;; Do everything in bytes; the Lemur's OSC spec uses blobs, and I doubt it's going
 ;; to handle any non-ASCII encoding such as UTF-8.
@@ -90,7 +90,7 @@
 (int \c)
 
 (map count
-     (f/package-data (byte-array (map byte [1 2 3 4 5]))))
+     (p/package-data (byte-array (map byte [1 2 3 4 5]))))
 
 
 (def ba (io/read-file "test-data/tiny_PREPPED.jzml"))
@@ -125,7 +125,10 @@
 (defn boz [size]
   (if (< size 30)
     nil
-    (x/fudge-container [0 0] [size size] [80 80 80] (boz (- size 25)))))
+    (x/fudge-container {:position [0 0]
+                        :size [size size]
+                        :colour [80 80 80]}
+                       (boz (- size 25)))))
 
 (boz 200)
 
@@ -135,9 +138,31 @@
  (.getBytes (x/format-project-for-upload
              (x/project "TestProject")
              (x/fudge-window (x/fudge-container
-                              [100 100]
-                              [500 500]
-                              [80 120 120]
+                              {:position [100 100]
+                               :size [500 500]
+                               :colour [80 120 120]}
                               (boz 600))))))
 
-(sp/sierpinski 2 [0 0] 100)
+(sp/sierpinski 3)
+
+(concat [1 2 3] [4 5 6])
+
+(io/transmit-payload
+ "10.0.0.125"
+ 8002
+ (.getBytes
+  (x/format-project-for-upload
+   (x/project "TestProject")
+   (x/fudge-window
+    (x/fudge-container
+     {:position [150 5]
+      :size [(+ 16 (* 27 25)) (+ 16 (* 27 25))]
+      :colour [100 100 100]}
+     (for [[xx yy] (:points (sp/sierpinski 3))]
+       (let [c (if (even? (+ xx yy)) [255 255 255] [100 100 140])]
+         (x/fudge-button {:id (+ xx (* yy 27))
+                          :name "MyButton"
+                          :position [(* xx 25) (* yy 25)]
+                          :size [25 25]
+                          :off-colour c
+                          :on-colour [255 0 0]}))))))))

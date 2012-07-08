@@ -2,17 +2,23 @@
   (:require (sifaka [io :as io]
                     [xml-fu :as xml])))
 
+
+(def template
+  [[0 0] [1 0] [2 0]
+   [0 1] [2 1]
+   [0 2] [1 2] [2 2]])
+
 (defn sierpinski
-  ^{:doc "Return list of X/Y position and size of squares."}
-  [depth [x y] size]
-  (if (= depth 0)
-    nil
-    (conj (remove nil? (map (fn [xy]
-                              (sierpinski
-                               (dec depth)
-                               (map (partial * size) xy)
-                               (/ size 3)))
-                            [[-1/3 1/3] [0 1/3] [1/3 1/3]
-                             [-1/3 0] [1/3 0]
-                             [-1/3 -1/3] [0 -1/3] [1/3 -1/3]]))
-          [[x y] size])))
+  ^{:doc "Sierpinski as a replicating generator: deeper generations
+          replicate a pattern with higher X and Y."}
+  [depth]
+  (if (= depth 1)
+    {:points template
+     :scale 3}
+    (let [{:keys [points scale]}
+          (sierpinski (dec depth))]
+      {:points
+       (apply concat (map (fn [[tx ty]] (map (fn [[x y]] [(+ x (* tx scale))
+                                                        (+ y (* ty scale))]) points))
+                          template))
+       :scale (* scale 3)})))
