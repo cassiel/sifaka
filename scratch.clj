@@ -2,6 +2,8 @@
   (:require (sifaka [io :as io]
                     [util :as u]
                     [packets :as p]
+                    [object-common :as com]
+                    [objects :as obj]
                     [xml-fu :as x])
             (sifaka.examples [sierpinski :as sp])
             (clojure [prxml :as px]))
@@ -125,10 +127,10 @@
 (defn boz [size]
   (if (< size 30)
     nil
-    (x/fudge-container {:position [0 0]
-                        :size [size size]
-                        :colour [80 80 80]}
-                       (boz (- size 25)))))
+    (obj/container {:position [0 0]
+                    :size [size size]
+                    :colour [80 80 80]}
+                   (boz (- size 25)))))
 
 (boz 200)
 
@@ -137,11 +139,11 @@
  8002
  (.getBytes (x/format-project-for-upload
              (x/project "TestProject")
-             (x/fudge-window (x/fudge-container
-                              {:position [100 100]
-                               :size [500 500]
-                               :colour [80 120 120]}
-                              (boz 600))))))
+             (x/interface [(obj/container
+                            {:position [100 100]
+                             :size [500 500]
+                             :colour [80 120 120]}
+                            (boz 600))]))))
 
 (sp/sierpinski 3)
 
@@ -153,16 +155,37 @@
  (.getBytes
   (x/format-project-for-upload
    (x/project "TestProject")
-   (x/fudge-window
-    (x/fudge-container
-     {:position [150 5]
-      :size [(+ 16 (* 27 25)) (+ 16 (* 27 25))]
-      :colour [100 100 100]}
-     (for [[xx yy] (:points (sp/sierpinski 3))]
-       (let [c (if (even? (+ xx yy)) [255 255 255] [100 100 140])]
-         (x/fudge-button {:id (+ xx (* yy 27))
-                          :name "MyButton"
-                          :position [(* xx 25) (* yy 25)]
-                          :size [25 25]
-                          :off-colour c
-                          :on-colour [255 0 0]}))))))))
+   (x/interface
+    [(obj/container
+      {:position [150 5]
+       :size [(+ 16 (* 27 25)) (+ 16 (* 27 25))]
+       :colour [100 100 100]}
+      (for [[xx yy] (:points (sp/sierpinski 3))]
+        (let [c (if (even? (+ xx yy)) [255 255 255] [100 100 140])]
+          (obj/pads {:id (+ xx (* yy 27))
+                     :name "MyButton"
+                     :position [(* xx 25) (* yy 25)]
+                     :size [25 25]
+                     :off-colour c
+                     :on-colour [255 0 0]}))))]))))
+
+(concat 1 2 [4 5])
+
+;; -----
+
+(obj/pads {:id 345
+           :name "Hello"
+           :position [50 50]
+           :size [200 200]
+           :off-colour [0 0 0]
+           :on-colour [1 1 1]})
+
+(with-out-str (px/prxml (obj/pads {:id 345
+                                   :name "Hello"
+                                   :position [50 50]
+                                   :size [200 200]
+                                   :off-colour [0 0 0]
+                                   :on-colour [1 1 1]})))
+
+
+(com/env "my-obj" {})
