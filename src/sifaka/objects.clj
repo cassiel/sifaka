@@ -50,12 +50,38 @@
                :multicolor 0
                :multilabel 0}
               (cons
-               [:PARAM (merge {:name "x="
-                               :value 0.0
-                               :send 17
-                               :midi_scale "0,16363"
-                               :osc_scale "0.0,1.0"}
-                              (com/base-osc-params name "x")
-                              com/fudge-midi-params     ; Actually, midi_trigger=1 here.
-                              com/fudge-kbmouse-params)]
+               (com/param name "x" 0.0)
                (com/env name {}))))
+
+(defn ringarea
+  ^{:doc "RingArea control."}
+  [{id :id
+    name :name
+    [x y] :position
+    size :size
+    [r g b] :colour}]
+  (let [params [(com/param name "x" 0.5)
+                (com/param name "y" 0.5)]
+        variables [(com/variable name "attraction" 1.0)
+                   (com/variable name "friction" 0.8)
+                   (com/variable name "speed" 1.0)
+                   (com/variable name "attraction_x" 0.5)
+                   (com/variable name "attraction_y" 0.5)]]
+    (com/window {:class "RingArea"
+                 :id id
+                 :text name
+                 :x x
+                 :y y
+                 :width size
+                 :height size
+                 :label 0
+                 :state 1
+                 :group 0
+                 :send 1
+                 :capture 1
+                 :font "tahoma,10,0"
+                 :osc_target -2
+                 :midi_target -2
+                 :kbmouse_target -2
+                 :color (com/colour r g b)}
+                (concat params variables))))

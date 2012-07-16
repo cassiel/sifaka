@@ -37,13 +37,25 @@
    :osc_message (format "/%s/%s" object-name var-name)})
 
 (defn variable
-    ^{:doc "Common settings for an object variable. Value assumed to be float."}
+  ^{:doc "Common settings for an object variable. Value assumed to be float."}
   [object-name var-name var-value]
   [:VARIABLE (merge {:name (format "%s=%f" var-name var-value)
                      :send 0}
                     (base-osc-params object-name var-name)
                     fudge-midi-params
                     fudge-kbmouse-params)])
+
+(defn param
+  ^{:doc "Common settings for an object parameter."}
+  [obj-name param-name value]
+  [:PARAM (merge {:name (format "%s=" param-name)
+                  :value value
+                  :send 17 ; Is this the trigger mode?
+                  :midi_scale "0,16363"
+                  :osc_scale "0.0,1.0"}
+                 (base-osc-params obj-name param-name)
+                 fudge-midi-params
+                 fudge-kbmouse-params)])
 
 (defn window
   ^{:doc "Window phrase, with attributes (map) and sub-items (seq)."}

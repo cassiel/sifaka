@@ -2,6 +2,9 @@
 
 ## General
 
+- We need to generalise ADSRH (e.g. in Pads): these actually take
+  expressions.
+
 ## Specific Objects
 
 ### Container
@@ -16,3 +19,8 @@
 - There's no clear documentation for the properties `Multilabel` and
   `Multicolor` - I'm guessing these are scriptable/OSC controllable
   only. For now, they're always off.
+
+- Need to generalise ADSRH (see above).
+
+- To-do: "Capture", "light". (Light can apparently be a vector or
+  expression; we should investigate this.)
