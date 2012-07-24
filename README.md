@@ -1,6 +1,6 @@
 # Sifaka: a Clojure-based template builder for Lemur
 
-<div align="center">
+<div style="margin: 0 auto;">
 <img src="https://github.com/downloads/cassiel/sifaka/IMG_0010-600.PNG" />
 </div>
 
