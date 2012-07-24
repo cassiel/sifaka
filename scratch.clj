@@ -101,25 +101,39 @@
                                     :size 120
                                     :colour [(- 255 (* % 10)) 200 150]}) (range 16)))]))))
 
-(io/transmit-payload
- "10.0.0.125"
- 8002
- (.getBytes
-  (x/format-project-for-upload
-   (x/project "TestProject")
-   (x/interface
-    [(obj/container
-      {:position [150 5]
-       :size [(+ 16 (* 27 25)) (+ 16 (* 27 25))]
-       :colour [100 100 100]}
-      (for [[xx yy] (:points (sp/sierpinski 3))]
-        (let [c (if (even? (+ xx yy)) [255 255 255] [100 100 140])]
-          (obj/pads {:id (+ xx (* yy 27))
-                     :name "MyButton"
-                     :position [(* xx 25) (* yy 25)]
-                     :size [25 25]
-                     :off-colour c
-                     :on-colour [255 0 0]}))))]))))
+(int (/ (- 1024 (+ 16 (* 25 27))) 2))
+
+(* 27 9)
+
+(- 27 1 1 )
+
+(let [{:keys [scale points]} (sp/sierpinski 3)
+      button-size 25
+      buttons-pitch (* button-size scale)
+      container-pitch (+ 16 buttons-pitch)
+      x-pos (int (/ (- 1024 container-pitch) 2))]
+
+  (io/transmit-payload
+   "10.0.0.125"
+   8002
+   (.getBytes
+    (x/format-project-for-upload
+     (x/project "TestProject")
+     (x/interface
+      [(obj/container
+        {:position [x-pos 5]
+         :size [(+ 16 (* scale button-size)) (+ 16 (* scale button-size))]
+         :colour [100 100 100]}
+        (for [[xx yy] points]
+          (let [c (if (even? (+ xx yy))
+                    [(* yy 9) (* xx 9) 255]
+                    [255 (* (- scale xx 1) 9) (* (- scale yy 1) 9)])]
+            (obj/pads {:id (+ xx (* yy scale))
+                       :name "MyButton"
+                       :position [(* xx button-size) (* yy button-size)]
+                       :size [button-size button-size]
+                       :off-colour c
+                       :on-colour [255 0 0]}))))])))))
 
 ;; -----
 
