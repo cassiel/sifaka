@@ -1,8 +1,9 @@
 # Sifaka: a Clojure-based template builder for Lemur
 
-<div style="margin: 0 auto;">
-<img src="https://github.com/downloads/cassiel/sifaka/IMG_0010-600.PNG" />
-</div>
+<img
+        style="display: block; margin: 0 auto;"
+        src="https://github.com/downloads/cassiel/sifaka/IMG_0010-600.PNG"
+/>
 
 Sifaka is a package for constructing [Liine Lemur][liine] templates,
 and uploading them
