@@ -11,6 +11,8 @@
            [java.nio ByteBuffer]
            [java.net InetAddress InetSocketAddress DatagramSocket DatagramPacket]))
 
+(def LEMUR "192.168.2.103")
+
 
 ;; --- Basic XML generation.
 
@@ -39,7 +41,7 @@
 (boz 200)
 
 (io/transmit-payload
- "10.0.0.125"
+ LEMUR
  8002
  (.getBytes (x/format-project-for-upload
              (x/project "TestProject")
@@ -54,7 +56,7 @@
 ;; More examples.
 
 (io/transmit-payload
- "10.0.0.125"
+ LEMUR
  8002
  (.getBytes (x/format-project-for-upload
              (x/project "TestProject")
@@ -70,7 +72,7 @@
                                        :on-colour [255 255 255]}))]))))
 
 (io/transmit-payload
- "10.0.0.125"
+ LEMUR
  8002
  (.getBytes (x/format-project-for-upload
              (x/project "TestProject")
@@ -82,10 +84,10 @@
                                            :name "ra"
                                            :position [0 0]
                                            :size 284
-                                           :colour [150 150 150]}))]))))
+                                           :colour [0 150 150]}))]))))
 
 (io/transmit-payload
- "10.0.0.125"
+ LEMUR
  8002
  (.getBytes (x/format-project-for-upload
              (x/project "TestProject")
@@ -114,7 +116,7 @@
       x-pos (int (/ (- 1024 container-pitch) 2))]
 
   (io/transmit-payload
-   "10.0.0.125"
+   LEMUR
    8002
    (.getBytes
     (x/format-project-for-upload
@@ -135,6 +137,8 @@
                        :off-colour c
                        :on-colour [255 0 0]}))))])))))
 
+(e e e e  e e e )
+
 ;; -----
 
 (obj/pads {:id 345
@@ -153,3 +157,15 @@
 
 
 (com/env "my-obj" {})
+
+
+
+
+#(+ %)
+
+
+
+#{1 2 3}
+
+
+(fn [x] x)

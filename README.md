@@ -1,18 +1,16 @@
 # Sifaka: a Clojure-based template builder for Lemur
 
-<div style="text-align: center;">
 <img src="https://github.com/downloads/cassiel/sifaka/IMG_0010-600.PNG" />
-</div>
 
 Sifaka is a package for constructing [Liine Lemur][liine] templates,
 and uploading them
 to iOS devices, purely in Clojure, avoiding the rather quirky WYSIWYG
 template editor.
 
-The code is at an early stage; we're just testing with `Container`
-objects at the moment, as we shake out some details of the XML
-generation. This is likely to be a slow process, as the object
-parameters are numerous and subtle.
+The code is at an early stage; we only have a small set of objects
+implemented so far (`Container`, `Pads` and `RingArea`), as we shake out
+some details of the XML generation. This is likely to be a slow process,
+as the object parameters are numerous and subtle.
 
 Thanks to Matthew Stanton, whose Python code [here][stanton] pointed the
 way to uploading templates via TCP/IP. (We figured out the rest, and
