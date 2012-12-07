@@ -11,8 +11,7 @@
            [java.nio ByteBuffer]
            [java.net InetAddress InetSocketAddress DatagramSocket DatagramPacket]))
 
-(def LEMUR "192.168.2.103")
-
+(def LEMUR "192.168.85.141")
 
 ;; --- Basic XML generation.
 
@@ -157,15 +156,3 @@
 
 
 (com/env "my-obj" {})
-
-
-
-
-#(+ %)
-
-
-
-#{1 2 3}
-
-
-(fn [x] x)
