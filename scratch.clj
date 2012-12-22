@@ -11,9 +11,9 @@
            [java.nio ByteBuffer]
            [java.net InetAddress InetSocketAddress DatagramSocket DatagramPacket]))
 
-(def LEMUR "192.168.85.141")
+(def LEMUR "10.0.0.125")
 
-;; --- Basic XML generation.
+;; --- Testing basic XML generation.
 
 (with-out-str (px/prxml [:p] [:q]))
 
@@ -26,6 +26,23 @@
 (with-out-str (p/prxml (x/project "Hello World")))
 
 (with-out-str (p/prxml (x/fudge-container [100 100] [200 50] [80 80 80] [:foo])))
+
+;; --- Simple assembly and transmission test using io directly: an empty container.
+
+(def container1
+  (x/format-project-for-upload
+   (x/project "TestProject")
+   (x/interface [(obj/container
+                  {:position [50 50]
+                   :size [200 200]
+                   :colour [80 120 120]})])))
+
+(str container1)
+
+(io/transmit-payload
+ LEMUR
+ 8002
+ (.getBytes container1))
 
 ;; Nested container example. (container() takes varargs for the contents.)
 

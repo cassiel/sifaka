@@ -1,7 +1,4 @@
-(ns sifaka.examples.sierpinski
-  (:require (sifaka [io :as io]
-                    [xml-fu :as xml])))
-
+(ns sifaka.examples.sierpinski)
 
 (def template
   [[0 0] [1 0] [2 0]
